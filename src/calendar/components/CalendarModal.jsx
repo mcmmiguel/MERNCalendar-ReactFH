@@ -26,7 +26,7 @@ Modal.setAppElement('#root');
 export const CalendarModal = () => {
 
     const { isDateModalOpen, closeDateModal } = useUIStore();
-    const { activeEvent } = useCalendarStore();
+    const { activeEvent, startSavingEvent } = useCalendarStore();
 
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
     const [formValues, setFormValues] = useState({
@@ -72,12 +72,13 @@ export const CalendarModal = () => {
         closeDateModal();
     };
 
-    const onSubmit = (event) => {
+    const onSubmit = async (event) => {
         event.preventDefault();
         setIsFormSubmitted(true);
 
         if (formValues.title.length === 0) {
-            Swal.fire('Título inválido', 'Por favor, ingrese un título válido')
+            Swal.fire('Título inválido', 'Por favor, ingrese un título válido');
+            return;
         }
 
         const difference = differenceInSeconds(formValues.end, formValues.start);
@@ -86,6 +87,9 @@ export const CalendarModal = () => {
             return;
         }
 
+        await startSavingEvent(formValues);
+        closeDateModal();
+        setIsFormSubmitted(false);
 
     }
 

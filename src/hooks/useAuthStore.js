@@ -33,11 +33,11 @@ export const useAuthStore = () => {
 
         const token = localStorage.getItem('token');
 
-        if (!token) return dispatch(onLogout('Su sesión ha expirado'));
+        if (!token) return dispatch(onLogout());
 
         try {
 
-            const { data } = calendarAPI.get('/auth/renew');
+            const { data } = await calendarAPI.get('/auth/renew');
             localStorage.setItem('token', data.token);
             localStorage.setItem('token-init-date', new Date().getTime());
 

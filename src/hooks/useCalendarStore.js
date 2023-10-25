@@ -18,7 +18,7 @@ export const useCalendarStore = () => {
         try {
             if (calendarEvent.id) {
                 // Actualizando
-                const { data } = await calendarAPI.put(`/events/${calendarEvent.id}`, calendarEvent);
+                await calendarAPI.put(`/events/${calendarEvent.id}`, calendarEvent);
                 dispatch(onUpdateEvent({ ...calendarEvent, user }));
                 return;
             }
@@ -46,9 +46,15 @@ export const useCalendarStore = () => {
         }
     }
 
-    const startDeletingEvent = () => {
-        // TODO LLEGAR AL BACKEND
-        dispatch(onDeleteEvent());
+    const startDeletingEvent = async () => {
+        try {
+            await calendarAPI.delete(`/events/${activeEvent.id}`);
+            dispatch(onDeleteEvent());
+            return;
+        } catch (error) {
+            console.log(error);
+            Swal.fire('Error al eliminar', error.response.data.msg, 'error');
+        }
     }
 
 

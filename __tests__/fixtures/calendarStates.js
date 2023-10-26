@@ -31,5 +31,5 @@ export const calendarWithEventsState = {
 export const calendarWithActiveEventState = {
     isLoadingEvents: false,
     events: [...events],
-    activeEvent: [...events[0]],
+    activeEvent: { ...events[0] },
 }
